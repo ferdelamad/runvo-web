@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens — Runvo landing (from the Claude Design source).
+   Palette is warm/earthy: cream paper, clay accent, sage confirmations.
+--------------------------------------------------------------------------- */
+@theme {
+  /* Paper & neutrals */
+  --color-cream-50: #f9f4ed;
+  --color-cream-100: #f5ead8;
+  --color-cream-200: #eee7db;
+  --color-cream-300: #ebddc5;
+  --color-cream-400: #dcd3c4;
+  --color-cream-500: #c0b6a5;
+
+  /* Text & dark surfaces */
+  --color-ink-500: #a19786;
+  --color-ink-600: #82796a;
+  --color-ink-700: #645c50;
+  --color-ink-800: #474238;
+  --color-ink-900: #2e2b25;
+  --color-ink-950: #201e1d;
+
+  /* Clay — primary action */
+  --color-clay-50: #fff2eb;
+  --color-clay-100: #ffe1d0;
+  --color-clay-200: #ffc6a5;
+  --color-clay-300: #f6a06b;
+  --color-clay-500: #c67139;
+  --color-clay-600: #b2622d;
+  --color-clay-700: #8c491a;
+  --color-clay-900: #643312;
+
+  /* Sage — confirmations, "it worked" states */
+  --color-sage-50: #f0fae1;
+  --color-sage-100: #e1eecc;
+  --color-sage-200: #ccdbb2;
+  --color-sage-300: #aebf92;
+  --color-sage-400: #8fa073;
+  --color-sage-500: #728157;
+  --color-sage-600: #56633f;
+  --color-sage-700: #3d472b;
+
+  --font-sans: var(--font-figtree), system-ui, sans-serif;
+  --font-display: var(--font-caprasimo), system-ui, sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-out-snap: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@layer base {
+  html {
+    /* Chrome cancels the native jump to a URL fragment on page load if
+       scroll-behavior is already "smooth" at that point (the in-flight
+       hydration reflow interrupts it), so smooth scrolling is switched on
+       after mount instead — see the effect in SiteHeader. */
+    scroll-behavior: auto;
+    /* Sticky header clearance for in-page anchors */
+    scroll-padding-top: 96px;
+  }
+
+  html.rv-smooth-scroll {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-cream-100);
+    color: var(--color-ink-950);
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background: var(--color-clay-200);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-clay-500);
+    outline-offset: 2px;
+  }
+
+  input::placeholder {
+    color: var(--color-ink-500);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion primitives.
+   Elements start hidden and are revealed by an IntersectionObserver that sets
+   `data-visible`. Both reduced-motion users and no-JS visitors get the final
+   state immediately (see the <noscript> block in the root layout).
+--------------------------------------------------------------------------- */
+@utility rv-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.7s var(--ease-out-soft),
+    transform 0.7s var(--ease-out-soft);
+
+  &[data-visible] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility rv-lift {
+  transform: scale(0.985);
+  transition:
+    transform 0.9s var(--ease-out-soft),
+    border-radius 0.9s var(--ease-out-soft);
+
+  &[data-visible] {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  html.rv-smooth-scroll {
+    scroll-behavior: auto;
+  }
+
+  .rv-reveal,
+  .rv-lift {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .rv-animated {
+    animation: none !important;
+  }
+}
+
+@keyframes rv-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes rv-dot {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}

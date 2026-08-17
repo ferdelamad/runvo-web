@@ -1,14 +1,77 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useInView } from "@/hooks/use-in-view";
 import { cn } from "@/lib/cn";
 
+/**
+ * Beat sheet for one pass, in milliseconds. The slow bar is meant to be tedious
+ * — the comparison only lands if you feel the wait, and at 2.4s on an ease-out
+ * curve nobody did. Durations live here rather than in `duration-*` classes
+ * because the replay schedule below has to stay in step with them.
+ */
+const ENTER_BEAT = 450;
+const SLOW_FILL = 6500;
+const FAST_FILL = 450;
+/** How long the finished pair rests before rewinding. */
+const HOLD = 2600;
+const DRAIN = 450;
+const REST = 600;
+
+/**
+ * Enough replays to catch someone reading the copy alongside, then it settles
+ * on the full bars instead of looping into wallpaper. Scrolling away and back
+ * re-arms it.
+ */
+const MAX_PASSES = 3;
+
 /** Same story on both bars: one takes ten hours to land, the other four seconds. */
 export function ResponseBars() {
   const ref = useRef<HTMLDivElement>(null);
-  const filled = useInView(ref, { threshold: 0.5 });
+  const inView = useInView(ref, { threshold: 0.5, once: false });
+
+  const [filled, setFilled] = useState(false);
+  const filledRef = useRef(false);
+
+  useEffect(() => {
+    if (!inView) return;
+
+    const apply = (next: boolean) => {
+      filledRef.current = next;
+      setFilled(next);
+    };
+
+    // Reduced motion gets the conclusion without the theatre — a bar that
+    // snapped between empty and full on a loop would just be a blinking light.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      apply(true);
+      return;
+    }
+
+    let timer: ReturnType<typeof setTimeout>;
+    let passes = 0;
+
+    const fill = () => {
+      apply(true);
+      timer = setTimeout(endPass, SLOW_FILL + HOLD);
+    };
+
+    const endPass = () => {
+      passes += 1;
+      // Stop on the full bars: that finished state is the whole argument.
+      if (passes >= MAX_PASSES) return;
+      apply(false);
+      timer = setTimeout(fill, DRAIN + REST);
+    };
+
+    // Returning to a full set of bars rewinds them before replaying.
+    const rewinding = filledRef.current;
+    apply(false);
+    timer = setTimeout(fill, rewinding ? DRAIN + REST : ENTER_BEAT);
+
+    return () => clearTimeout(timer);
+  }, [inView]);
 
   return (
     <div ref={ref} className="flex flex-col gap-[18px]">
@@ -19,10 +82,8 @@ export function ResponseBars() {
           value="10 hrs"
         />
         <Track className="bg-ink-900">
-          <Fill
-            filled={filled}
-            className="bg-ink-600 delay-[400ms] duration-[2400ms] ease-[cubic-bezier(0.3,0.6,0.2,1)]"
-          />
+          {/* Linear, because a grind that never speeds up is the point. */}
+          <Fill filled={filled} fillMs={SLOW_FILL} ease="ease-linear" className="bg-ink-600" />
         </Track>
         <Footnote className="text-cream-400" from="9:00 PM — she asks" to="7:00 AM — you reply" />
       </div>
@@ -30,9 +91,13 @@ export function ResponseBars() {
       <div className="bg-sage-600 rounded-[28px] px-[26px] py-6">
         <Legend className="text-sage-100" label="Today, with Runvo" value="4 sec" />
         <Track className="bg-sage-700">
+          {/* No delay on either bar: both footnotes start at the same 9:00 PM
+              message, so they have to leave the gate together. */}
           <Fill
             filled={filled}
-            className="bg-sage-200 delay-200 duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+            fillMs={FAST_FILL}
+            ease="ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+            className="bg-sage-200"
           />
         </Track>
         <Footnote className="text-sage-50" from="9:00 PM — she asks" to="9:00 PM — she's booked" />
@@ -71,13 +136,30 @@ function Track({ className, children }: { className: string; children: React.Rea
   );
 }
 
-function Fill({ filled, className }: { filled: boolean; className: string }) {
+/**
+ * Slides a full-width pill in from the left of a clipped track. Cheaper than
+ * animating `right` — which relaid out every frame, for 6.5s on the slow bar —
+ * and the rounded leading edge survives, which a scaleX would have squashed.
+ */
+function Fill({
+  filled,
+  fillMs,
+  ease,
+  className,
+}: {
+  filled: boolean;
+  fillMs: number;
+  /** Applied only while filling; the rewind has its own curve. */
+  ease: string;
+  className: string;
+}) {
   return (
     <div
+      style={{ transitionDuration: `${filled ? fillMs : DRAIN}ms` }}
       className={cn(
-        "absolute top-0 bottom-0 left-0 rounded-full transition-[right] motion-reduce:transition-none",
-        filled ? "right-0" : "right-full",
+        "absolute inset-0 rounded-full transition-transform motion-reduce:transition-none",
         className,
+        filled ? cn("translate-x-0", ease) : "-translate-x-full ease-in",
       )}
     />
   );

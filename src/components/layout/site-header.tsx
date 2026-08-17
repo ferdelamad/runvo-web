@@ -98,16 +98,18 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex-1" />
+        <div className="ml-auto flex items-center gap-2 sm:gap-3.5">
+          {/* A phone header has no room for the toggle next to the wordmark, the
+              CTA and the menu button — below `sm` it moves into the menu panel. */}
+          <div className="hidden sm:block">
+            <LanguageToggle spanish={spanish} onChange={setSpanish} />
+          </div>
 
-        <div className="flex items-center gap-2 sm:gap-3.5">
-          <LanguageToggle spanish={spanish} onChange={setSpanish} />
-
-          <ButtonLink href="#waitlist" size="sm" className="hidden sm:inline-flex">
-            Join the waitlist
-          </ButtonLink>
-          <ButtonLink href="#waitlist" size="sm" className="sm:hidden">
-            Join
+          {/* One button with a swapping label: passing `hidden` to ButtonLink
+              can't win over its own `inline-flex`, since cn() only joins. */}
+          <ButtonLink href="#waitlist" size="sm">
+            <span className="sm:hidden">Join</span>
+            <span className="hidden sm:inline">Join the waitlist</span>
           </ButtonLink>
 
           <button
@@ -119,16 +121,18 @@ export function SiteHeader() {
             className="border-cream-400 bg-cream-300 hover:bg-cream-400 flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border transition-colors lg:hidden"
           >
             <span aria-hidden className="relative block h-[9px] w-[15px]">
+              {/* Both bars stay pinned to the box and animate on transform
+                  alone, so the burger/close swap actually tweens. */}
               <span
                 className={cn(
-                  "bg-ink-800 absolute left-0 block h-[1.5px] w-full rounded-full transition-transform duration-300",
-                  menuOpen ? "top-1/2 rotate-45" : "top-0",
+                  "bg-ink-800 absolute top-0 left-0 block h-[1.5px] w-full rounded-full transition-transform duration-300",
+                  menuOpen && "translate-y-[3.75px] rotate-45",
                 )}
               />
               <span
                 className={cn(
-                  "bg-ink-800 absolute left-0 block h-[1.5px] w-full rounded-full transition-transform duration-300",
-                  menuOpen ? "top-1/2 -rotate-45" : "top-full",
+                  "bg-ink-800 absolute bottom-0 left-0 block h-[1.5px] w-full rounded-full transition-transform duration-300",
+                  menuOpen && "-translate-y-[3.75px] -rotate-45",
                 )}
               />
             </span>
@@ -152,6 +156,11 @@ export function SiteHeader() {
               {link.label}
             </a>
           ))}
+
+          {/* The bar drops the toggle below `sm`; this is where it lands. */}
+          <div className="border-cream-400 mt-2 flex border-t pt-4 sm:hidden">
+            <LanguageToggle spanish={spanish} onChange={setSpanish} />
+          </div>
         </nav>
       )}
 

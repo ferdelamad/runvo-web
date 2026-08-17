@@ -67,7 +67,7 @@ export function Pricing() {
         >
           At $150 an appointment, the Front Desk pays for itself the first time it
           catches one you&rsquo;d have missed. And a client you keep isn&rsquo;t one
-          appointment — it&rsquo;s every visit she&rsquo;d have made this year.
+          appointment — it&rsquo;s every visit they&rsquo;d have made this year.
         </Reveal>
       </div>
     </SectionLift>

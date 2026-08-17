@@ -85,7 +85,7 @@ export function ResponseBars() {
           {/* Linear, because a grind that never speeds up is the point. */}
           <Fill filled={filled} fillMs={SLOW_FILL} ease="ease-linear" className="bg-ink-600" />
         </Track>
-        <Footnote className="text-cream-400" from="9:00 PM — she asks" to="7:00 AM — you reply" />
+        <Footnote className="text-cream-400" from="9:00 PM — they ask" to="7:00 AM — you reply" />
       </div>
 
       <div className="bg-sage-600 rounded-[28px] px-[26px] py-6">
@@ -100,7 +100,7 @@ export function ResponseBars() {
             className="bg-sage-200"
           />
         </Track>
-        <Footnote className="text-sage-50" from="9:00 PM — she asks" to="9:00 PM — she's booked" />
+        <Footnote className="text-sage-50" from="9:00 PM — they ask" to="9:00 PM — they're booked" />
       </div>
     </div>
   );

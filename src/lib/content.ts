@@ -31,9 +31,11 @@ export const assistantThread: ChatMessage[] = [
   { side: "in", text: "Hecho — jueves 4:30 pm, Ana R., lash fill, $65." },
   {
     side: "in",
-    text: "Tu jueves tiene tres huecos entre 12 y 4. ¿Le escribo a las que no han reagendado desde junio?",
+    // "quienes" rather than "las que": Spanish carries the assumption in its
+    // articles, so a neutral relative pronoun is what keeps this agnostic.
+    text: "Tu jueves tiene tres huecos entre 12 y 4. ¿Le escribo a quienes no han reagendado desde junio?",
   },
-  { side: "out", text: "sí, a las de junio nada más" },
+  { side: "out", text: "sí, nada más junio" },
 ];
 
 /**
@@ -54,7 +56,7 @@ export const stats = [
 /** Appointment lifecycle. Exactly one stage is the owner's own work. */
 export type LifecycleStage = {
   label: string;
-  /** The single stage the owner still does herself. */
+  /** The single stage the owner still does themselves. */
   isYou?: boolean;
 };
 

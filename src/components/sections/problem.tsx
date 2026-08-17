@@ -39,7 +39,8 @@ export function Problem() {
               delay={200}
               className="font-display text-clay-300 m-0 max-w-[15em] text-[24px] leading-[1.25] sm:text-[29px]"
             >
-              She texted at 9pm. You replied at 7am. She booked someone else at 9:15pm.
+              A client texted at 9pm. You replied at 7am. They booked someone else at
+              9:15pm.
             </Reveal>
           </div>
 

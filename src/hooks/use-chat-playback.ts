@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type RefObject } from "react";
 
-import type { ChatMessage } from "@/lib/content";
+import type { ChatMessage } from "@/lib/dictionary";
 import { useInView } from "./use-in-view";
 import { useReducedMotion } from "./use-reduced-motion";
 

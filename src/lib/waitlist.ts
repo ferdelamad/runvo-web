@@ -1,3 +1,5 @@
+import type { WaitlistErrorCode } from "@/lib/dictionary";
+
 export type WaitlistSignup = {
   email: string;
   /** Where on the page the signup came from, for later attribution. */
@@ -5,10 +7,13 @@ export type WaitlistSignup = {
   submittedAt: string;
 };
 
-export type WaitlistState = {
-  status: "idle" | "success" | "error";
-  message?: string;
-};
+/**
+ * The action runs on the server, where the page's language isn't in scope, so
+ * failures come back as a code and the form renders it in its own language.
+ */
+export type WaitlistState =
+  | { status: "idle" | "success" }
+  | { status: "error"; error: WaitlistErrorCode };
 
 export const initialWaitlistState: WaitlistState = { status: "idle" };
 

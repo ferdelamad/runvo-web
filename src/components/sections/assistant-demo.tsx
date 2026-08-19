@@ -4,7 +4,7 @@ import { useRef } from "react";
 
 import { ChatBubble } from "@/components/ui/chat-bubble";
 import { useChatPlayback } from "@/hooks/use-chat-playback";
-import { assistantThread } from "@/lib/content";
+import type { Dictionary } from "@/lib/dictionary";
 
 const fromOwner =
   "bg-ink-700 text-cream-50 self-end max-w-[88%] rounded-[18px_18px_6px_18px]";
@@ -12,7 +12,8 @@ const fromAssistant =
   "bg-cream-50 text-ink-950 self-start max-w-[90%] rounded-[18px_18px_18px_6px]";
 
 /** The owner-facing thread — the half of the product no booking platform builds. */
-export function AssistantDemo() {
+export function AssistantDemo({ dict }: { dict: Dictionary }) {
+  const { assistantHeader, assistantThread } = dict.roles;
   const threadRef = useRef<HTMLDivElement>(null);
   const { revealed } = useChatPlayback(threadRef, { messages: assistantThread });
 
@@ -21,11 +22,11 @@ export function AssistantDemo() {
       <div className="mb-4 flex items-center gap-2.5">
         <span aria-hidden className="bg-sage-400 block h-2 w-2 rounded-full" />
         <span className="text-cream-500 text-[12.5px] font-extrabold tracking-[0.06em]">
-          ASSISTANT · YOUR OWN THREAD
+          {assistantHeader}
         </span>
       </div>
 
-      <div ref={threadRef} lang="es" className="flex flex-col gap-2.5">
+      <div ref={threadRef} className="flex flex-col gap-2.5">
         {assistantThread.map((message, index) => (
           <ChatBubble
             key={message.text}

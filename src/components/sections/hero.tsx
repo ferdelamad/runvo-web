@@ -2,15 +2,12 @@ import { ParallaxBlob } from "@/components/motion/parallax-blob";
 import { Reveal } from "@/components/motion/reveal";
 import { ButtonLink } from "@/components/ui/button";
 import { DotList } from "@/components/ui/dot-list";
+import type { Dictionary } from "@/lib/dictionary";
 import { FrontDeskDemo } from "./front-desk-demo";
 
-const proofPoints = [
-  "Answers in seconds",
-  "Works in Spanish and English",
-  "Set up in a week",
-];
+export function Hero({ dict }: { dict: Dictionary }) {
+  const { hero } = dict;
 
-export function Hero() {
   return (
     <section
       id="top"
@@ -19,7 +16,7 @@ export function Hero() {
       <div>
         <Reveal className="bg-cream-300 border-cream-400 text-ink-700 mb-6 inline-flex items-center gap-[9px] rounded-full border py-[7px] pr-4 pl-2.5 text-sm font-semibold">
           <span aria-hidden className="bg-sage-400 block h-2 w-2 rounded-full" />
-          First clients onboarding now
+          {hero.badge}
         </Reveal>
 
         <Reveal
@@ -27,8 +24,8 @@ export function Hero() {
           delay={60}
           className="font-display mt-0 mb-6 text-[42px] leading-[0.98] tracking-[-0.025em] text-balance sm:text-[58px] lg:text-[78px]"
         >
-          Runvo staffs <br className="hidden sm:inline" />
-          businesses of one.
+          {hero.titleLines[0]} <br className="hidden sm:inline" />
+          {hero.titleLines[1]}
         </Reveal>
 
         <Reveal
@@ -36,21 +33,23 @@ export function Hero() {
           delay={120}
           className="text-ink-800 mb-8 max-w-[30em] text-[19px] leading-[1.5] text-pretty sm:text-[21px]"
         >
-          The front desk, the assistant, and the marketer you could never afford to
-          hire. Start with one. Add the others when you&rsquo;re ready.
+          {hero.lede}
         </Reveal>
 
         <Reveal delay={180} className="mb-[30px] flex flex-wrap gap-3.5">
           <ButtonLink href="#waitlist" size="lg">
-            Join the waitlist
+            {hero.ctaPrimary}
           </ButtonLink>
           <ButtonLink href="#how" variant="outline" size="lg">
-            See how it works
+            {hero.ctaSecondary}
           </ButtonLink>
         </Reveal>
 
         <Reveal delay={240}>
-          <DotList items={proofPoints} className="text-ink-700 text-[15px] font-medium" />
+          <DotList
+            items={hero.proofPoints}
+            className="text-ink-700 text-[15px] font-medium"
+          />
         </Reveal>
       </div>
 
@@ -63,7 +62,7 @@ export function Hero() {
           speed={0.14}
           className="bg-clay-100 bottom-5 -left-[46px] z-0 h-[150px] w-[150px]"
         />
-        <FrontDeskDemo />
+        <FrontDeskDemo dict={dict} />
       </Reveal>
     </section>
   );

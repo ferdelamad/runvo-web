@@ -2,9 +2,11 @@ import { ParallaxBlob } from "@/components/motion/parallax-blob";
 import { Reveal } from "@/components/motion/reveal";
 import { SectionLift } from "@/components/motion/section-lift";
 import { cn } from "@/lib/cn";
-import { pricingTiers } from "@/lib/content";
+import type { Dictionary } from "@/lib/dictionary";
 
-export function Pricing() {
+export function Pricing({ dict }: { dict: Dictionary }) {
+  const { pricing } = dict;
+
   return (
     <SectionLift
       id="pricing"
@@ -20,11 +22,11 @@ export function Pricing() {
           as="h2"
           className="font-display mt-0 mb-10 max-w-[14em] text-[34px] leading-[1.03] tracking-[-0.02em] sm:text-[44px] lg:text-[60px]"
         >
-          One appointment a month pays for it.
+          {pricing.title}
         </Reveal>
 
         <div className="mb-8 grid gap-[18px] md:grid-cols-3 lg:mb-[34px]">
-          {pricingTiers.map((tier, index) => (
+          {pricing.tiers.map((tier, index) => (
             <Reveal
               key={tier.name}
               delay={index * 70}
@@ -46,7 +48,7 @@ export function Pricing() {
                 <span
                   className={cn("text-xl", tier.featured ? "text-clay-100" : "text-cream-500")}
                 >
-                  /mo
+                  {pricing.perMonth}
                 </span>
               </div>
               <div
@@ -65,9 +67,7 @@ export function Pricing() {
           as="p"
           className="text-cream-400 m-0 max-w-[42em] text-[18px] leading-[1.55] text-pretty sm:text-[20px]"
         >
-          At $150 an appointment, the Front Desk pays for itself the first time it
-          catches one you&rsquo;d have missed. And a client you keep isn&rsquo;t one
-          appointment — it&rsquo;s every visit they&rsquo;d have made this year.
+          {pricing.closer}
         </Reveal>
       </div>
     </SectionLift>

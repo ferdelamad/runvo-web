@@ -2,18 +2,11 @@ export const site = {
   name: "Runvo",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://runvo.io",
   email: "hola@runvo.io",
-  tagline: "Runvo staffs businesses of one.",
-  description:
-    "The front desk, the assistant, and the marketer you could never afford to hire. Runvo answers WhatsApp, Instagram and text in Spanish or English, books into your calendar, and follows up — in seconds.",
-  locale: "en_US",
 } as const;
 
 /**
- * Header/footer navigation. Add `{ href: "/blog", label: "Blog" }` once two or
- * three posts exist — an empty blog reads as an unreal company.
+ * Stats band. Numbers come from the two-week inquiry count in the pilot studio.
+ * Until it lands, this renders the empty-but-honest variant. The numbers and
+ * their labels live in each dictionary.
  */
-export const navLinks = [
-  { href: "#how", label: "How it works" },
-  { href: "#roles", label: "Roles" },
-  { href: "#pricing", label: "Pricing" },
-] as const;
+export const statsPending = true;

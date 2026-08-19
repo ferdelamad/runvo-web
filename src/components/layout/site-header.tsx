@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { ButtonLink } from "@/components/ui/button";
 import { Wordmark } from "@/components/ui/wordmark";
 import { cn } from "@/lib/cn";
-import { navLinks } from "@/lib/site";
+import type { Dictionary } from "@/lib/dictionary";
+import { localeHref, localeMeta, locales } from "@/lib/i18n";
 
 /** Below this the header always shows; past it, scrolling down hides it. */
 const HIDE_AFTER = 220;
@@ -17,10 +18,9 @@ const LIFT_AFTER = 40;
  * back within reach the moment the reader scrolls up. Once it has a background
  * the nav links collapse so the logo and the one CTA carry the bar.
  */
-export function SiteHeader() {
+export function SiteHeader({ dict }: { dict: Dictionary }) {
   const [hidden, setHidden] = useState(false);
   const [lifted, setLifted] = useState(false);
-  const [spanish, setSpanish] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -81,13 +81,13 @@ export function SiteHeader() {
         </a>
 
         <nav
-          aria-label="Main"
+          aria-label={dict.common.navLabel}
           className={cn(
             "ml-3 hidden items-center gap-[26px] text-[15.5px] font-medium transition-[opacity,width] duration-300 lg:flex",
             lifted && "pointer-events-none w-0 overflow-hidden opacity-0",
           )}
         >
-          {navLinks.map((link) => (
+          {dict.navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -102,14 +102,14 @@ export function SiteHeader() {
           {/* A phone header has no room for the toggle next to the wordmark, the
               CTA and the menu button — below `sm` it moves into the menu panel. */}
           <div className="hidden sm:block">
-            <LanguageToggle spanish={spanish} onChange={setSpanish} />
+            <LanguageToggle dict={dict} />
           </div>
 
           {/* One button with a swapping label: passing `hidden` to ButtonLink
               can't win over its own `inline-flex`, since cn() only joins. */}
           <ButtonLink href="#waitlist" size="sm">
-            <span className="sm:hidden">Join</span>
-            <span className="hidden sm:inline">Join the waitlist</span>
+            <span className="sm:hidden">{dict.common.joinShort}</span>
+            <span className="hidden sm:inline">{dict.common.join}</span>
           </ButtonLink>
 
           <button
@@ -117,7 +117,7 @@ export function SiteHeader() {
             onClick={() => setMenuOpen((open) => !open)}
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
-            aria-label="Menu"
+            aria-label={dict.common.menuLabel}
             className="border-cream-400 bg-cream-300 hover:bg-cream-400 flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border transition-colors lg:hidden"
           >
             <span aria-hidden className="relative block h-[9px] w-[15px]">
@@ -143,10 +143,10 @@ export function SiteHeader() {
       {menuOpen && (
         <nav
           id="mobile-nav"
-          aria-label="Main"
+          aria-label={dict.common.navLabel}
           className="border-cream-400 bg-cream-100/95 backdrop-blur-[12px] border-t px-5 pb-4 lg:hidden"
         >
-          {navLinks.map((link) => (
+          {dict.navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -159,62 +159,51 @@ export function SiteHeader() {
 
           {/* The bar drops the toggle below `sm`; this is where it lands. */}
           <div className="border-cream-400 mt-2 flex border-t pt-4 sm:hidden">
-            <LanguageToggle spanish={spanish} onChange={setSpanish} />
+            <LanguageToggle dict={dict} />
           </div>
         </nav>
-      )}
-
-      {spanish && (
-        <div className="mx-auto max-w-[1180px] px-5 pb-3 sm:px-8">
-          <p
-            lang="es"
-            className="bg-sage-100 border-sage-200 text-sage-700 rounded-2xl border px-[18px] py-2.5 text-[14.5px]"
-          >
-            La versión en español está en camino — escrita de nuevo, no traducida.
-            Mientras tanto, el Front Desk ya contesta en español.
-          </p>
-        </div>
       )}
     </header>
   );
 }
 
 /**
- * The Spanish site is written, not translated, so it isn't live yet. Noticing
- * the toggle is most of its job — it announces who Runvo is built for.
+ * Each language is its own URL, so this is two links rather than a switch —
+ * which is what lets someone share the Spanish page as the Spanish page, and
+ * what search engines follow between the two `hreflang` alternates.
+ *
+ * Plain anchors, not `Link`: the locales are separate root layouts, so the
+ * swap is a document navigation either way.
  */
-function LanguageToggle({
-  spanish,
-  onChange,
-}: {
-  spanish: boolean;
-  onChange: (spanish: boolean) => void;
-}) {
+function LanguageToggle({ dict }: { dict: Dictionary }) {
   return (
     <div
       role="group"
-      aria-label="Language"
+      aria-label={dict.common.languageLabel}
       className="border-cream-400 bg-cream-300 flex items-center gap-0.5 rounded-full border p-[3px]"
     >
-      {[
-        { code: "en", label: "EN", active: !spanish },
-        { code: "es", label: "ES", active: spanish },
-      ].map((option) => (
-        <button
-          key={option.code}
-          type="button"
-          onClick={() => onChange(option.code === "es")}
-          aria-pressed={option.active}
-          className={cn(
-            "cursor-pointer rounded-full px-[13px] py-1.5 text-[13px] font-bold tracking-[0.04em] transition-colors",
-            option.active
-              ? "bg-clay-500 text-clay-50"
-              : "text-ink-700 hover:bg-cream-400 bg-transparent",
-          )}
-        >
-          {option.label}
-        </button>
-      ))}
+      {locales.map((locale) => {
+        const current = locale === dict.locale;
+
+        return (
+          <a
+            key={locale}
+            href={localeHref(locale)}
+            hrefLang={locale}
+            lang={locale}
+            aria-current={current ? "true" : undefined}
+            aria-label={localeMeta[locale].name}
+            className={cn(
+              "rounded-full px-[13px] py-1.5 text-[13px] font-bold tracking-[0.04em] transition-colors",
+              current
+                ? "bg-clay-500 text-clay-50"
+                : "text-ink-700 hover:bg-cream-400 bg-transparent",
+            )}
+          >
+            {localeMeta[locale].label}
+          </a>
+        );
+      })}
     </div>
   );
 }

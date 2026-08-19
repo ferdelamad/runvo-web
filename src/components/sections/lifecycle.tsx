@@ -6,11 +6,7 @@ import { Reveal } from "@/components/motion/reveal";
 import { useInView } from "@/hooks/use-in-view";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/lib/cn";
-import { lifecycleStages } from "@/lib/content";
-
-const TOTAL = lifecycleStages.length;
-/** The one stage the owner keeps; everything either side of it is a handoff. */
-const YOU_INDEX = lifecycleStages.findIndex((stage) => stage.isYou);
+import type { Dictionary } from "@/lib/dictionary";
 
 /**
  * Beat sheet for one run, in milliseconds. The marker rests at a stage, then
@@ -44,7 +40,13 @@ type Spot = { x: number; y: number };
  * the rail as it goes. The two steps either side of the human stage stay dotted
  * and never fill, so the closing line is something you watch happen.
  */
-export function Lifecycle() {
+export function Lifecycle({ dict }: { dict: Dictionary }) {
+  const { lifecycle } = dict;
+  const stages = lifecycle.stages;
+  const total = stages.length;
+  /** The one stage the owner keeps; everything either side of it is a handoff. */
+  const youIndex = stages.findIndex((stage) => stage.isYou);
+
   const listRef = useRef<HTMLOListElement>(null);
   const inView = useInView(listRef, { threshold: 0.2, once: false });
   const reducedMotion = useReducedMotion();
@@ -56,7 +58,7 @@ export function Lifecycle() {
   const [live, setLive] = useState(false);
 
   // Reduced motion gets the finished lifecycle without the journey.
-  const reached = reducedMotion ? TOTAL - 1 : at;
+  const reached = reducedMotion ? total - 1 : at;
 
   const spots = useBadgeSpots(listRef);
   /** Whether a previous run left the rail dressed and needing a clear-down. */
@@ -69,7 +71,7 @@ export function Lifecycle() {
     let passes = 0;
 
     const hop = (from: number) => {
-      if (from >= TOTAL - 1) {
+      if (from >= total - 1) {
         timer = setTimeout(endPass, HOLD);
         return;
       }
@@ -113,14 +115,14 @@ export function Lifecycle() {
     timer = setTimeout(startedRef.current ? clearDown : start, ENTER_BEAT);
 
     return () => clearTimeout(timer);
-  }, [inView, reducedMotion]);
+  }, [inView, reducedMotion, total]);
 
   // Where the marker is headed — which is the stage it is already crossing to
   // while hopping. Clamped so it parks on the first badge while the rail is
   // bare, rather than at the list's origin.
-  const markerIndex = Math.max(0, Math.min(hopping ? at + 1 : at, TOTAL - 1));
+  const markerIndex = Math.max(0, Math.min(hopping ? at + 1 : at, total - 1));
   const markerAt = spots[markerIndex];
-  const markerOnYou = markerIndex === YOU_INDEX;
+  const markerOnYou = markerIndex === youIndex;
 
   return (
     <section id="how" className="mx-auto max-w-[1180px] px-5 py-20 sm:px-8 lg:pt-24 lg:pb-[104px]">
@@ -128,24 +130,26 @@ export function Lifecycle() {
         as="h2"
         className="font-display mt-0 mb-10 text-[34px] leading-[1.05] tracking-[-0.02em] sm:text-[44px] lg:mb-[46px] lg:text-[56px]"
       >
-        An appointment isn&rsquo;t one moment.
+        {lifecycle.title}
       </Reveal>
 
       <ol
         ref={listRef}
         className="relative m-0 mb-9 flex list-none flex-col p-0 lg:mb-[38px] lg:flex-row"
       >
-        {lifecycleStages.map((stage, index) => (
+        {stages.map((stage, index) => (
           <Stage
             key={stage.label}
             index={index}
             label={stage.label}
             isYou={Boolean(stage.isYou)}
+            youLabel={lifecycle.youLabel}
+            youIndex={youIndex}
             reached={index <= reached}
             active={live && !hopping && index === reached}
             /** The rail into the next stage paints while the marker crosses it. */
             trailOn={index < reached || (index === reached && hopping)}
-            isLast={index === TOTAL - 1}
+            isLast={index === total - 1}
           />
         ))}
 
@@ -174,7 +178,8 @@ export function Lifecycle() {
       </ol>
 
       <Reveal as="p" className="font-display m-0 text-[26px] leading-[1.2] sm:text-[34px]">
-        You do one of these. <span className="text-clay-700">Runvo does the rest.</span>
+        {lifecycle.closer.yours}{" "}
+        <span className="text-clay-700">{lifecycle.closer.runvo}</span>
       </Reveal>
     </section>
   );
@@ -218,6 +223,8 @@ function Stage({
   index,
   label,
   isYou,
+  youLabel,
+  youIndex,
   reached,
   active,
   trailOn,
@@ -226,6 +233,8 @@ function Stage({
   index: number;
   label: string;
   isYou: boolean;
+  youLabel: string;
+  youIndex: number;
   reached: boolean;
   active: boolean;
   trailOn: boolean;
@@ -233,7 +242,7 @@ function Stage({
 }) {
   return (
     <li className="relative flex gap-3.5 pb-2.5 last:pb-0 lg:min-w-0 lg:flex-1 lg:flex-col lg:gap-3 lg:px-[5px] lg:pb-0">
-      {!isLast && <Trail on={trailOn} handoff={index === YOU_INDEX - 1 || index === YOU_INDEX} />}
+      {!isLast && <Trail on={trailOn} handoff={index === youIndex - 1 || index === youIndex} />}
 
       <span
         data-badge
@@ -277,7 +286,7 @@ function Stage({
         </span>
         {isYou && (
           <span className="text-clay-600 mt-1.5 block text-[11px] font-extrabold tracking-[0.08em]">
-            YOU
+            {youLabel}
           </span>
         )}
       </div>

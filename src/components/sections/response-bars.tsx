@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { useInView } from "@/hooks/use-in-view";
 import { cn } from "@/lib/cn";
+import type { Dictionary } from "@/lib/dictionary";
 
 /**
  * Beat sheet for one pass, in milliseconds. The slow bar is meant to be tedious
@@ -26,8 +27,10 @@ const REST = 600;
  */
 const MAX_PASSES = 3;
 
+type Bars = Dictionary["problem"]["bars"];
+
 /** Same story on both bars: one takes ten hours to land, the other four seconds. */
-export function ResponseBars() {
+export function ResponseBars({ bars }: { bars: Bars }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { threshold: 0.5, once: false });
 
@@ -76,20 +79,16 @@ export function ResponseBars() {
   return (
     <div ref={ref} className="flex flex-col gap-[18px]">
       <div className="bg-ink-800 rounded-[28px] px-[26px] py-6">
-        <Legend
-          className="text-cream-500"
-          label="Today, without a front desk"
-          value="10 hrs"
-        />
+        <Legend className="text-cream-500" label={bars.slow.label} value={bars.slow.value} />
         <Track className="bg-ink-900">
           {/* Linear, because a grind that never speeds up is the point. */}
           <Fill filled={filled} fillMs={SLOW_FILL} ease="ease-linear" className="bg-ink-600" />
         </Track>
-        <Footnote className="text-cream-400" from="9:00 PM — they ask" to="7:00 AM — you reply" />
+        <Footnote className="text-cream-400" from={bars.slow.from} to={bars.slow.to} />
       </div>
 
       <div className="bg-sage-600 rounded-[28px] px-[26px] py-6">
-        <Legend className="text-sage-100" label="Today, with Runvo" value="4 sec" />
+        <Legend className="text-sage-100" label={bars.fast.label} value={bars.fast.value} />
         <Track className="bg-sage-700">
           {/* No delay on either bar: both footnotes start at the same 9:00 PM
               message, so they have to leave the gate together. */}
@@ -100,7 +99,7 @@ export function ResponseBars() {
             className="bg-sage-200"
           />
         </Track>
-        <Footnote className="text-sage-50" from="9:00 PM — they ask" to="9:00 PM — they're booked" />
+        <Footnote className="text-sage-50" from={bars.fast.from} to={bars.fast.to} />
       </div>
     </div>
   );

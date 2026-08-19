@@ -23,10 +23,7 @@ export async function joinWaitlist(
     .toLowerCase();
 
   if (!EMAIL.test(email) || email.length > 254) {
-    return {
-      status: "error",
-      message: "That address doesn't look right — mind checking it?",
-    };
+    return { status: "error", error: "invalid-email" };
   }
 
   try {
@@ -37,10 +34,7 @@ export async function joinWaitlist(
     });
   } catch (error) {
     console.error("[waitlist] failed to save signup", error);
-    return {
-      status: "error",
-      message: "Something broke on our end. Try again, or write to hola@runvo.io.",
-    };
+    return { status: "error", error: "save-failed" };
   }
 
   return { status: "success" };

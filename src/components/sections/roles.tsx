@@ -2,10 +2,12 @@ import { Reveal } from "@/components/motion/reveal";
 import { SectionLift } from "@/components/motion/section-lift";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
-import { roles, type Role } from "@/lib/content";
+import type { Dictionary, Role } from "@/lib/dictionary";
 import { AssistantDemo } from "./assistant-demo";
 
-export function Roles() {
+export function Roles({ dict }: { dict: Dictionary }) {
+  const { roles } = dict;
+
   return (
     <SectionLift
       id="roles"
@@ -16,22 +18,22 @@ export function Roles() {
           as="h2"
           className="font-display mt-0 mb-10 text-[34px] leading-[1.05] tracking-[-0.02em] sm:text-[44px] lg:mb-12 lg:text-[56px]"
         >
-          Hire your first employee. Then your second.
+          {roles.title}
         </Reveal>
 
         <div className="grid items-start gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
           <div className="flex flex-col gap-[18px]">
-            {roles.map((role, index) => (
+            {roles.items.map((role, index) => (
               <Reveal key={role.name} delay={index * 80}>
-                <RoleCard role={role} />
+                <RoleCard role={role} badges={roles.badges} />
               </Reveal>
             ))}
           </div>
 
           <Reveal delay={120} className="lg:sticky lg:top-[110px]">
-            <AssistantDemo />
+            <AssistantDemo dict={dict} />
             <p className="text-ink-700 mx-1 mt-4 mb-0 text-[14.5px] leading-[1.45]">
-              Works with Square, and whatever you already use.
+              {roles.integrations}
             </p>
           </Reveal>
         </div>
@@ -40,7 +42,13 @@ export function Roles() {
   );
 }
 
-function RoleCard({ role }: { role: Role }) {
+function RoleCard({
+  role,
+  badges,
+}: {
+  role: Role;
+  badges: Dictionary["roles"]["badges"];
+}) {
   const available = role.status === "available";
 
   return (
@@ -70,7 +78,7 @@ function RoleCard({ role }: { role: Role }) {
             available ? "text-sage-700 bg-sage-100" : "text-ink-700 bg-cream-400",
           )}
         >
-          {available ? "AVAILABLE NOW" : "COMING SOON"}
+          {available ? badges.available : badges.soon}
         </span>
       </div>
 

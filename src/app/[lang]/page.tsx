@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Hero } from "@/components/sections/hero";
@@ -8,53 +10,62 @@ import { Roles } from "@/components/sections/roles";
 import { Stats } from "@/components/sections/stats";
 import { Trust } from "@/components/sections/trust";
 import { Waitlist } from "@/components/sections/waitlist";
+import type { Dictionary } from "@/lib/dictionary";
+import { getDictionary } from "@/lib/dictionary";
+import { isLocale, locales } from "@/lib/i18n";
 import { site } from "@/lib/site";
-import { pricingTiers, roles } from "@/lib/content";
 
-export default function HomePage() {
+export default async function HomePage({ params }: PageProps<"/[lang]">) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
+
+  const dict = await getDictionary(lang);
+
   return (
     <div className="min-h-screen overflow-x-clip">
       <a
         href="#top"
         className="bg-clay-500 text-clay-50 sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[70] focus:rounded-full focus:px-5 focus:py-2.5 focus:font-bold"
       >
-        Skip to content
+        {dict.common.skipToContent}
       </a>
 
-      <SiteHeader />
+      <SiteHeader dict={dict} />
 
       <main>
-        <Hero />
-        <Problem />
-        <Stats />
-        <Lifecycle />
-        <Roles />
-        <Trust />
-        <Pricing />
-        <Waitlist />
+        <Hero dict={dict} />
+        <Problem dict={dict} />
+        <Stats dict={dict} />
+        <Lifecycle dict={dict} />
+        <Roles dict={dict} />
+        <Trust dict={dict} />
+        <Pricing dict={dict} />
+        <Waitlist dict={dict} />
       </main>
 
-      <SiteFooter />
+      <SiteFooter dict={dict} />
 
       <script
         type="application/ld+json"
         // Values come from local content, not user input.
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData()) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData(dict)) }}
       />
     </div>
   );
 }
 
 /** Product/offer markup so search results can show the roles and their prices. */
-function structuredData() {
+function structuredData(dict: Dictionary) {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: site.name,
-    url: site.url,
+    url: `${site.url}/${dict.locale}`,
     applicationCategory: "BusinessApplication",
-    description: site.description,
-    inLanguage: ["en", "es"],
+    description: dict.meta.description,
+    // The product is bilingual whichever page you landed on; this page is one.
+    inLanguage: dict.locale,
+    availableLanguage: [...locales],
     publisher: {
       "@type": "Organization",
       name: site.name,
@@ -62,8 +73,8 @@ function structuredData() {
       email: site.email,
       areaServed: "US-CA",
     },
-    featureList: roles.map((role) => `${role.name}: ${role.body}`),
-    offers: pricingTiers.map((tier) => ({
+    featureList: dict.roles.items.map((role) => `${role.name}: ${role.body}`),
+    offers: dict.pricing.tiers.map((tier) => ({
       "@type": "Offer",
       name: tier.name,
       price: tier.price.replace(/[^\d.]/g, ""),

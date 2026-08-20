@@ -20,6 +20,23 @@ export type LifecycleStage = {
   isYou?: boolean;
 };
 
+/** One client waiting on a review invite, as shown in the reviews demo. */
+export type ReviewClient = {
+  name: string;
+  /** First name only — the select buttons are narrow. */
+  short: string;
+  time: string;
+};
+
+/** A drafted review invite, ready for the owner to send. */
+export type ReviewDraft = {
+  /** Position in the list, e.g. "1." */
+  label: string;
+  name: string;
+  /** `{link}` marks where the review URL sits inside the message. */
+  body: string;
+};
+
 export type Role = {
   name: string;
   price: string | null;
@@ -94,6 +111,26 @@ export type Dictionary = {
     assistantHeader: string;
     /** Owner-facing thread beside the cards. `out` is the owner texting in. */
     assistantThread: ChatMessage[];
+    /** The end-of-day review run: the assistant asks first, then drafts. */
+    reviews: {
+      header: string;
+      nudgeTitle: string;
+      nudgeBody: string;
+      nudgePrimary: string;
+      nudgeSecondary: string;
+      listTitle: string;
+      listBody: string;
+      clients: ReviewClient[];
+      skipLabel: string;
+      draftCta: string;
+      drafting: string;
+      drafts: ReviewDraft[];
+      /** Shown in place of `{link}`; shortened so it doesn't wrap three lines. */
+      link: string;
+      whatsapp: string;
+      sms: string;
+      done: string;
+    };
   };
   trust: {
     title: string;

@@ -4,6 +4,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import type { Dictionary, Role } from "@/lib/dictionary";
 import { AssistantDemo } from "./assistant-demo";
+import { ReviewsDemo } from "./reviews-demo";
 
 export function Roles({ dict }: { dict: Dictionary }) {
   const { roles } = dict;
@@ -30,9 +31,10 @@ export function Roles({ dict }: { dict: Dictionary }) {
             ))}
           </div>
 
-          <Reveal delay={120} className="lg:sticky lg:top-[110px]">
+          <Reveal delay={120} className="flex flex-col gap-[18px]">
             <AssistantDemo dict={dict} />
-            <p className="text-ink-700 mx-1 mt-4 mb-0 text-[14.5px] leading-[1.45]">
+            <ReviewsDemo dict={dict} />
+            <p className="text-ink-700 mx-1 mt-0 mb-0 text-[14.5px] leading-[1.45]">
               {roles.integrations}
             </p>
           </Reveal>

@@ -149,7 +149,7 @@ export const es: Dictionary = {
       },
     ],
     badges: { available: "DISPONIBLE YA", soon: "PRÓXIMAMENTE" },
-    integrations: "Funciona con Square y con lo que ya uses.",
+    integrations: "Funciona con Square y con otras plataformas de agendamiento.",
     assistantHeader: "ASSISTANT · TU PROPIO CHAT",
     assistantThread: [
       { side: "out", text: "métele a Ana mañana 4:30, lash fill" },
@@ -162,6 +162,39 @@ export const es: Dictionary = {
       },
       { side: "out", text: "sí, nada más junio" },
     ],
+    reviews: {
+      header: "ASSISTANT · RESEÑAS",
+      nudgeTitle: "🌙 Fin del día",
+      nudgeBody:
+        "Atendiste a 4 clienta(s) hoy — 2 aún no reciben invitación de reseña.",
+      nudgePrimary: "Ver la lista",
+      nudgeSecondary: "Hoy no",
+      listTitle: "🌟 Reseñas — hoy",
+      listBody: "2 clienta(s) aún sin invitación de reseña.",
+      clients: [
+        { name: "Valeria Ortiz Mena", short: "Valeria", time: "10:00" },
+        { name: "Camila Rueda Soto", short: "Camila", time: "17:00" },
+      ],
+      skipLabel: "🚫",
+      draftCta: "✍️ Redactar (2)",
+      drafting: "✍️ Redactando 2 mensaje(s)…",
+      drafts: [
+        {
+          label: "1.",
+          name: "Valeria Ortiz Mena",
+          body: "Hola Valeria, ¡gracias por venir hoy! 🌟 Si te gustó tu cita, nos ayudarías muchísimo con una reseña rápida: {link}\n\nY como agradecimiento por tu confianza, tienes 15% en tu próxima cita con el código VUELVE15. ¡Nos vemos pronto! — Penny",
+        },
+        {
+          label: "2.",
+          name: "Camila Rueda Soto",
+          body: "Hola Camila, ¡gracias por venir hoy! 🌟 Si te gustó tu cita, nos ayudarías muchísimo con una reseña rápida: {link}\n\nY como agradecimiento por tu confianza, tienes 15% en tu próxima cita con el código VUELVE15. ¡Nos vemos pronto! — Penny",
+        },
+      ],
+      link: "g.page/r/CTK4G…/review",
+      whatsapp: "WhatsApp",
+      sms: "SMS",
+      done: "✅ 2 lista(s). Toca WhatsApp o SMS en cada una para enviarla.",
+    },
   },
 
   trust: {

@@ -139,7 +139,7 @@ export const en: Dictionary = {
       },
     ],
     badges: { available: "AVAILABLE NOW", soon: "COMING SOON" },
-    integrations: "Works with Square, and whatever you already use.",
+    integrations: "Works with Square and other booking platforms.",
     assistantHeader: "ASSISTANT · YOUR OWN THREAD",
     assistantThread: [
       { side: "out", text: "put ana in tomorrow 4:30, lash fill" },
@@ -150,6 +150,38 @@ export const en: Dictionary = {
       },
       { side: "out", text: "yeah, june only" },
     ],
+    reviews: {
+      header: "ASSISTANT · REVIEWS",
+      nudgeTitle: "🌙 End of day",
+      nudgeBody: "You saw 4 client(s) today — 2 still haven’t been asked for a review.",
+      nudgePrimary: "See the list",
+      nudgeSecondary: "Not today",
+      listTitle: "🌟 Reviews — today",
+      listBody: "2 client(s) still without a review invite.",
+      clients: [
+        { name: "Valeria Ortiz Mena", short: "Valeria", time: "10:00" },
+        { name: "Camila Rueda Soto", short: "Camila", time: "17:00" },
+      ],
+      skipLabel: "🚫",
+      draftCta: "✍️ Draft (2)",
+      drafting: "✍️ Drafting 2 message(s)…",
+      drafts: [
+        {
+          label: "1.",
+          name: "Valeria Ortiz Mena",
+          body: "Hi Valeria, thanks for coming in today! 🌟 If you loved your appointment, a quick review would help us so much: {link}\n\nAnd as a thank-you, here’s 15% off your next visit with the code COMEBACK15. See you soon! — Penny",
+        },
+        {
+          label: "2.",
+          name: "Camila Rueda Soto",
+          body: "Hi Camila, thanks for coming in today! 🌟 If you loved your appointment, a quick review would help us so much: {link}\n\nAnd as a thank-you, here’s 15% off your next visit with the code COMEBACK15. See you soon! — Penny",
+        },
+      ],
+      link: "g.page/r/CTK4G…/review",
+      whatsapp: "WhatsApp",
+      sms: "SMS",
+      done: "✅ 2 ready. Tap WhatsApp or SMS on each one to send it.",
+    },
   },
 
   trust: {

@@ -18,7 +18,7 @@ export function WaitlistForm({ copy }: { copy: Dictionary["waitlist"] }) {
     return (
       <div
         role="status"
-        className="bg-sage-100 border-sage-200 mb-[22px] flex items-center gap-3.5 rounded-[28px] border px-[26px] py-[18px] sm:rounded-full"
+        className="bg-cream-50 mb-[22px] flex items-center gap-3.5 rounded-[28px] px-[26px] py-[18px] sm:rounded-full"
       >
         <span aria-hidden className="bg-sage-500 block h-[22px] w-[22px] flex-none rounded-full" />
         <span className="text-sage-700 text-[17px] font-semibold">{copy.success}</span>
@@ -41,7 +41,7 @@ export function WaitlistForm({ copy }: { copy: Dictionary["waitlist"] }) {
           placeholder={copy.placeholder}
           aria-invalid={state.status === "error" || undefined}
           aria-describedby={state.status === "error" ? "waitlist-error" : undefined}
-          className="border-cream-500 bg-cream-50 text-ink-950 flex-[1_1_280px] rounded-full border-[1.5px] px-[22px] py-4 text-[17px]"
+          className="bg-cream-50 text-ink-950 focus-visible:outline-cream-50 flex-[1_1_260px] rounded-full border-[1.5px] border-transparent px-[22px] py-4 text-[17px] shadow-[inset_0_1px_2px_rgba(46,43,37,0.12)]"
         />
 
         {/* Honeypot — hidden from people, tempting to bots. */}
@@ -54,13 +54,17 @@ export function WaitlistForm({ copy }: { copy: Dictionary["waitlist"] }) {
           className="pointer-events-none absolute h-0 w-0 opacity-0"
         />
 
-        <Button type="submit" size="lg" disabled={pending}>
+        <Button type="submit" variant="ink" size="lg" disabled={pending}>
           {pending ? copy.submitting : copy.submit}
         </Button>
       </form>
 
       {state.status === "error" && (
-        <p id="waitlist-error" role="alert" className="text-clay-700 mt-3 mb-0 text-[15px] font-semibold">
+        <p
+          id="waitlist-error"
+          role="alert"
+          className="text-cream-50 mt-3 mb-0 text-[15px] font-semibold"
+        >
           {copy.errors[state.error]}
         </p>
       )}

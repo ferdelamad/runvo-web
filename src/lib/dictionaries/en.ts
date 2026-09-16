@@ -1,12 +1,16 @@
 import type { Dictionary } from "@/lib/dictionary";
 
+/**
+ * The owner in every demo is Yaz, and her studio is fictional. Client names
+ * are invented; the 555 number is the one phone number that can't be real.
+ */
 export const en: Dictionary = {
   locale: "en",
 
   meta: {
     tagline: "Runvo staffs businesses of one.",
     description:
-      "The front desk, the assistant, and the marketer you could never afford to hire. Runvo answers WhatsApp, Instagram and text in Spanish or English, books into your calendar, and follows up — in seconds.",
+      "The front desk, the assistant, and the marketer you could never afford to hire. Runvo answers WhatsApp, Instagram and text in Spanish or English, books into your calendar, and hands you the rest — in seconds.",
     keywords: [
       "AI front desk",
       "WhatsApp booking",
@@ -28,8 +32,10 @@ export const en: Dictionary = {
 
   navLinks: [
     { href: "#how", label: "How it works" },
-    { href: "#roles", label: "Roles" },
+    { href: "#roles", label: "What it does" },
+    { href: "#trust", label: "Trust" },
     { href: "#pricing", label: "Pricing" },
+    { href: "#faq", label: "FAQ" },
   ],
 
   hero: {
@@ -51,7 +57,7 @@ export const en: Dictionary = {
       { side: "in", text: "4:30 please" },
       {
         side: "out",
-        text: "Done. You're set for tomorrow at 4:30 PM. I'll send the reminder tonight.",
+        text: "Done — you’re set for tomorrow at 4:30 PM. A $15 deposit holds the spot: Zelle to (619) 555-0102 and reply “sent” 🙂",
       },
     ],
     contact: "Ana R.",
@@ -59,11 +65,12 @@ export const en: Dictionary = {
     channel: "WhatsApp · 9:02 PM",
     badge: "FRONT DESK",
     bookedTitle: "Booked into your calendar",
-    bookedDetail: "Thu 4:30 PM · Lash fill · $65 · reminder scheduled",
-    footnote: "Answered in 4 seconds. You were with a client.",
+    bookedDetail: "Thu 4:30 PM · Lash fill · $65 · deposit requested",
+    footnote: "Answered in 4 seconds, at 9:02 PM. Your day was already over.",
   },
 
   problem: {
+    eyebrow: "The problem",
     title: "You don’t have a front desk. You have a phone on silent.",
     body: [
       "Every business big enough to afford a receptionist has one. Yours is muted in a drawer while your hands are busy with a client.",
@@ -85,26 +92,37 @@ export const en: Dictionary = {
         to: "9:00 PM — they’re booked",
       },
     },
+    roi: {
+      line: "It answers at 9pm, when the alternative is you answering at 7am.",
+      sum: "At $150 an appointment, one message it catches pays for the month.",
+    },
   },
 
   stats: {
+    eyebrow: "Results",
+    title: "Proven to grow your business",
+    lede: "Real numbers from the studios running Runvo.",
     items: [
-      { value: "61%", label: "of inquiries waited more than twelve hours for a reply" },
-      { value: "28%", label: "never got a reply at all" },
-      { value: "3.4×", label: "book rate for fast replies versus slow ones" },
+      { value: "15hrs", plus: true, label: "saved every month on repetitive tasks" },
+      {
+        value: "60%",
+        plus: true,
+        label: "of bookings happen while you’re closed or with a client",
+      },
+      { value: "30%", plus: true, label: "more revenue in year one" },
     ],
-    pendingChip: "Counting now — two weeks, one Vacaville studio",
-    measuredChip: "Measured in one Vacaville studio, two weeks",
-    closer: "Runvo answers in seconds. Every channel. Even at 9pm.",
+    footnote:
+      "Based on current customer data and feedback. Updated as more studios come on.",
   },
 
   lifecycle: {
+    eyebrow: "How it works",
     title: "An appointment isn’t one moment.",
     stages: [
       { label: "Discovered" },
       { label: "Asked" },
       { label: "Booked" },
-      { label: "Reminded" },
+      { label: "Confirmed" },
       { label: "Served", isYou: true },
       { label: "Followed up" },
       { label: "Rebooked" },
@@ -114,20 +132,22 @@ export const en: Dictionary = {
   },
 
   roles: {
+    eyebrow: "What it does",
     title: "Hire your first employee. Then your second.",
+    lede: "Three roles, each one shown doing its job.",
     items: [
       {
         name: "Front Desk",
         price: "from $149/mo",
         status: "available",
-        body: "Answers WhatsApp, Instagram and text — in Spanish or English, in seconds. Quotes your prices, books into your calendar, sends the reminder, follows up with the ones who went quiet, and asks for the review afterward.",
+        body: "Answers WhatsApp, Instagram and text in Spanish or English, in seconds. Quotes your real prices, offers real openings, books into your calendar, and asks for the deposit.",
         cta: "Add to waitlist",
       },
       {
         name: "Assistant",
         price: "$99/mo",
         status: "available",
-        body: "Works for you, not your clients. Text it to book someone in. Ask what tomorrow looks like. It flags the gaps in your week before they become empty hours.",
+        body: "Works for you, not your clients. Text it to book someone in or ask what tomorrow looks like. And it opens the conversation itself: who to ask for a review tonight, who stopped coming and is worth a message on Monday.",
         cta: "Add to waitlist",
       },
       {
@@ -139,67 +159,187 @@ export const en: Dictionary = {
       },
     ],
     badges: { available: "AVAILABLE NOW", soon: "COMING SOON" },
-    integrations: "Works with Square and other booking platforms.",
-    assistantHeader: "ASSISTANT · YOUR OWN THREAD",
-    assistantThread: [
-      { side: "out", text: "put ana in tomorrow 4:30, lash fill" },
-      { side: "in", text: "Done — Thursday 4:30 PM, Ana R., lash fill, $65." },
+    integrations: "Works with Square. More booking platforms on the way.",
+    railLabel: "What Runvo does",
+    prev: "Previous",
+    next: "Next",
+    scenes: [
       {
-        side: "in",
-        text: "Your Thursday has three gaps between 12 and 4. Want me to message the ones who haven't rebooked since June?",
+        role: 0,
+        title: "Answers in the language they wrote in.",
+        body: "Rocío wrote in Spanish, so it answered in Spanish — your real price, your real openings, while you were mid-appointment.",
+        demo: {
+          kind: "client-chat",
+          contact: "Rocío M.",
+          initials: "RM",
+          channel: "WhatsApp · 1:12 PM",
+          thread: [
+            { side: "in", text: "Hola! Cuánto cuesta el brow lamination?" },
+            {
+              side: "out",
+              text: "¡Hola Rocío! El brow lamination es $85 y toma una hora. ¿Te aparto un espacio?",
+            },
+            { side: "in", text: "sí, el sábado si se puede" },
+            {
+              side: "out",
+              text: "El sábado tengo 10:00 am o 2:30 pm. ¿Cuál te queda mejor?",
+            },
+          ],
+        },
       },
-      { side: "out", text: "yeah, june only" },
+      {
+        role: 1,
+        title: "Booked from one text.",
+        body: "Type it the way you’d text a coworker. It asks before it guesses, and it won’t book outside your hours.",
+        demo: {
+          kind: "owner-chat",
+          thread: [
+            { side: "out", text: "put ana in tomorrow 4:30, lash fill" },
+            { side: "in", text: "Done — Thursday 4:30 PM, Ana R., lash fill, $65." },
+            { side: "out", text: "what do i have tomorrow" },
+            {
+              side: "in",
+              text: "Thursday, 3 booked: Marisol 11:00 brow lamination · Kim 1:30 lash fill · Ana 4:30 lash fill. Straight from Square, so anything you booked yourself is in there too.",
+            },
+          ],
+        },
+      },
+      {
+        role: 1,
+        title: "Asks for the review. You tap send.",
+        body: "45 minutes after closing it tells you who hasn’t been asked, drafts each message, and hands you the send. It never asks the same client twice.",
+        demo: {
+          kind: "nudge",
+          header: "ASSISTANT · TONIGHT",
+          link: "g.page/r/CTK4G…/review",
+          steps: [
+            {
+              title: "🌙 End of day",
+              body: "You saw 4 client(s) today — 2 still haven’t been asked for a review.",
+              buttons: [
+                { label: "See the list", tap: true },
+                { label: "Not today", muted: true },
+              ],
+            },
+            {
+              title: "🌟 Reviews — today",
+              body: "2 client(s) still without a review invite.",
+              list: ["1. Valeria Ortiz Mena · 10:00", "2. Camila Rueda Soto · 17:00"],
+              buttons: [
+                { label: "✓ 1. Valeria" },
+                { label: "🚫", muted: true },
+                { label: "✓ 2. Camila" },
+                { label: "🚫", muted: true },
+                { label: "✍️ Draft (2)", full: true, tap: true },
+              ],
+            },
+            { body: "✍️ Drafting 2 message(s)…" },
+            {
+              title: "1. Valeria Ortiz Mena",
+              body: "Hi Valeria, thanks for coming in today! 🌟 If you loved your appointment, a quick review would help us so much: {link}\n\nAnd as a thank-you, here’s 15% off your next visit with the code COMEBACK15. See you soon! — Yaz",
+              buttons: [{ label: "💬 WhatsApp ↗" }, { label: "📱 SMS ↗" }],
+            },
+            {
+              title: "2. Camila Rueda Soto",
+              body: "Hi Camila, thanks for coming in today! 🌟 If you loved your appointment, a quick review would help us so much: {link}\n\nAnd as a thank-you, here’s 15% off your next visit with the code COMEBACK15. See you soon! — Yaz",
+              buttons: [{ label: "💬 WhatsApp ↗" }, { label: "📱 SMS ↗" }],
+            },
+            { body: "✅ 2 ready. Tap WhatsApp or SMS on each one to send it." },
+          ],
+        },
+      },
+      {
+        role: 1,
+        title: "Notices who stopped coming.",
+        body: "Monday at 9 it lists the clients who haven’t been back and have nothing booked, with a message ready for each. It won’t write to anyone who already has an appointment.",
+        demo: {
+          kind: "nudge",
+          header: "ASSISTANT · MONDAY 9:00 AM",
+          link: "book.runvo.io/yaz",
+          steps: [
+            {
+              title: "☀️ Monday · win-back",
+              body: "3 clients haven’t been in for 60+ days and have nothing booked:",
+              list: [
+                "1. Lucía Ferrer · last visit Jun 12",
+                "2. Dani Rojas · Jun 20",
+                "3. Rosa Peña · Jul 2",
+              ],
+              buttons: [
+                { label: "✍️ Draft (3)", tap: true },
+                { label: "Not this week", muted: true },
+              ],
+            },
+            { body: "✍️ Drafting 3 message(s)…" },
+            {
+              title: "1. Lucía Ferrer",
+              body: "Hi Lucía! It’s been a little while 💛 I have a few openings this week if you’d like your usual — grab one here: {link}",
+              buttons: [{ label: "💬 WhatsApp ↗" }, { label: "📱 SMS ↗" }],
+            },
+            {
+              body: "✅ 3 ready. Anyone with an appointment already on the books was left off the list.",
+            },
+          ],
+        },
+      },
+      {
+        role: 2,
+        title: "Keeps you visible.",
+        body: "Posts, content, and the nudges that bring past clients back — while your hands are busy.",
+        demo: { kind: "soon" },
+      },
     ],
-    reviews: {
-      header: "ASSISTANT · REVIEWS",
-      nudgeTitle: "🌙 End of day",
-      nudgeBody: "You saw 4 client(s) today — 2 still haven’t been asked for a review.",
-      nudgePrimary: "See the list",
-      nudgeSecondary: "Not today",
-      listTitle: "🌟 Reviews — today",
-      listBody: "2 client(s) still without a review invite.",
-      clients: [
-        { name: "Valeria Ortiz Mena", short: "Valeria", time: "10:00" },
-        { name: "Camila Rueda Soto", short: "Camila", time: "17:00" },
-      ],
-      skipLabel: "🚫",
-      draftCta: "✍️ Draft (2)",
-      drafting: "✍️ Drafting 2 message(s)…",
-      drafts: [
-        {
-          label: "1.",
-          name: "Valeria Ortiz Mena",
-          body: "Hi Valeria, thanks for coming in today! 🌟 If you loved your appointment, a quick review would help us so much: {link}\n\nAnd as a thank-you, here’s 15% off your next visit with the code COMEBACK15. See you soon! — Penny",
-        },
-        {
-          label: "2.",
-          name: "Camila Rueda Soto",
-          body: "Hi Camila, thanks for coming in today! 🌟 If you loved your appointment, a quick review would help us so much: {link}\n\nAnd as a thank-you, here’s 15% off your next visit with the code COMEBACK15. See you soon! — Penny",
-        },
-      ],
-      link: "g.page/r/CTK4G…/review",
-      whatsapp: "WhatsApp",
-      sms: "SMS",
-      done: "✅ 2 ready. Tap WhatsApp or SMS on each one to send it.",
-    },
   },
 
   trust: {
+    eyebrow: "Trust",
     title: "It answers. It doesn’t guess.",
-    body: "Runvo works from your real prices, your real services, and your real calendar. When something falls outside what you’ve set, it stops and hands the conversation to you instead of making one up.",
-    chips: [
-      "Nobody is being replaced, because nobody was ever there",
-      "You set what it can say",
-      "You can turn it off in one tap",
+    body: "Every AI on the internet says it answers messages. The question that actually matters is whether it will embarrass you in front of a client who has been coming for three years. Here is exactly what it will and won’t do.",
+    rules: [
+      {
+        lead: "Prices come from your real catalog.",
+        rest: "Never “around”, never a range you didn’t set.",
+      },
+      {
+        lead: "Medical, refunds, complaints and legal go straight to you.",
+        rest: "Those never reach the AI at all — a filter in front of it, not an instruction to it.",
+      },
+      {
+        lead: "When it doesn’t know, it hands off and goes quiet.",
+        rest: "It tells you on Telegram and stays out of that thread until you’ve answered.",
+      },
+      {
+        lead: "It says it’s virtual.",
+        rest: "Once per conversation, because California requires it — and because your clients deserve to know.",
+      },
+      {
+        lead: "Nothing reaches a client without your thumb.",
+        rest: "Reviews and win-backs are drafted for you. You send them.",
+      },
+      {
+        lead: "Off in one tap.",
+        rest: "Your inbox is yours again the second you want it.",
+      },
     ],
-    demoTitle: "WHEN IT DOESN’T KNOW",
-    ask: "Do you do microblading? How much is it?",
-    reply: "Let me check with Yaz and get right back to you.",
-    handoffStrong: "Handed to you",
-    handoffRest: " — microblading isn’t on your service list.",
+    proof: [
+      { value: "4 sec", label: "average reply, day or night" },
+      { value: "0", label: "messages sent without your thumb" },
+      { value: "4", label: "subjects it hands straight to you, never answering itself" },
+    ],
+    demo: {
+      clientHeader: "WhatsApp · Ana R.",
+      ask: "Do you do microblading? How much is it?",
+      reply: "Let me check with Yaz and get right back to you.",
+      ownerHeader: "Telegram · you",
+      handoffTitle: "Handed to you",
+      handoffBody:
+        "Ana asked about microblading. It isn’t on your service list, so I didn’t quote anything.",
+      muted: "Quiet on Ana’s thread until you reply",
+    },
   },
 
   pricing: {
+    eyebrow: "Pricing",
     title: "One appointment a month pays for it.",
     tiers: [
       {
@@ -224,6 +364,39 @@ export const en: Dictionary = {
     perMonth: "/mo",
     closer:
       "At $150 an appointment, the Front Desk pays for itself the first time it catches one you’d have missed. And a client you keep isn’t one appointment — it’s every visit they’d have made this year.",
+    fine: "Month to month. Cancel in one message.",
+  },
+
+  faq: {
+    eyebrow: "FAQ",
+    title: "Questions owners ask first.",
+    lede: "The short answers. For anything else, write to hola@runvo.io and a person replies.",
+    items: [
+      {
+        q: "Does it replace my booking app?",
+        a: "No. Runvo works on top of Square, with more platforms on the way. Appointments it books land in the calendar you already use, and anything you book yourself shows up when you ask it what your day looks like.",
+      },
+      {
+        q: "What happens when it doesn’t know something?",
+        a: "It stops, tells the client it’s checking with you, and pings you on Telegram. It stays quiet on that conversation until you’ve answered. Medical, refund, complaint and legal messages never reach the AI at all — they come straight to you.",
+      },
+      {
+        q: "Which languages does it speak?",
+        a: "Spanish and English, in whichever one each client writes. If someone switches mid-conversation, it follows.",
+      },
+      {
+        q: "Will my clients know they’re talking to an assistant?",
+        a: "Yes. It says so once per conversation. That’s the law in California, and it’s also how you keep their trust.",
+      },
+      {
+        q: "What does the Assistant do that the Front Desk doesn’t?",
+        a: "The Front Desk talks to your clients. The Assistant talks to you: book someone from a text, ask what today looks like, and get nudged — at close about reviews, on Monday about clients who stopped coming. Everything it drafts, you send.",
+      },
+      {
+        q: "How long does setup take, and is there a contract?",
+        a: "About a week. You share your services, prices, hours and the rules you want it to follow; we connect Square and WhatsApp and run it beside you for the first few days. No contract — month to month, cancel in one message.",
+      },
+    ],
   },
 
   waitlist: {
@@ -243,5 +416,6 @@ export const en: Dictionary = {
 
   footer: {
     legal: "Runvo · California · Staffing businesses of one.",
+    otherLanguage: "Leer en español",
   },
 };

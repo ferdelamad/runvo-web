@@ -20,21 +20,27 @@ export type LifecycleStage = {
   isYou?: boolean;
 };
 
-/** One client waiting on a review invite, as shown in the reviews demo. */
-export type ReviewClient = {
-  name: string;
-  /** First name only — the select buttons are narrow. */
-  short: string;
-  time: string;
+/** A button attached to a message in the owner's Telegram thread. */
+export type NudgeButton = {
+  label: string;
+  /** The quieter of a pair, e.g. "Not today". */
+  muted?: boolean;
+  /** Spans the whole row instead of half of it. */
+  full?: boolean;
+  /** The one the owner taps in the demo, which advances to the next step. */
+  tap?: boolean;
 };
 
-/** A drafted review invite, ready for the owner to send. */
-export type ReviewDraft = {
-  /** Position in the list, e.g. "1." */
-  label: string;
-  name: string;
-  /** `{link}` marks where the review URL sits inside the message. */
+/**
+ * One message in a nudge run — the assistant opening a conversation, listing,
+ * drafting, and handing the send back. `{link}` in `body` marks where the
+ * shortened review or booking URL sits.
+ */
+export type NudgeStep = {
+  title?: string;
   body: string;
+  list?: string[];
+  buttons?: NudgeButton[];
 };
 
 export type Role = {
@@ -43,6 +49,31 @@ export type Role = {
   status: "available" | "soon";
   body: string;
   cta: string;
+};
+
+/** A client-side WhatsApp thread, answered by the Front Desk. */
+export type ClientChat = {
+  contact: string;
+  initials: string;
+  channel: string;
+  thread: ChatMessage[];
+};
+
+export type SceneDemo =
+  | ({ kind: "client-chat" } & ClientChat)
+  /** The owner's own thread. `out` is the owner texting in. */
+  | { kind: "owner-chat"; thread: ChatMessage[] }
+  /** The assistant opens the conversation; the owner taps through. */
+  | { kind: "nudge"; header: string; link: string; steps: NudgeStep[] }
+  | { kind: "soon" };
+
+/** One outcome card in the "what it does" rail, carrying its own live demo. */
+export type Scene = {
+  /** Index into `roles.items` — the card wears that role's name and price. */
+  role: number;
+  title: string;
+  body: string;
+  demo: SceneDemo;
 };
 
 export type Dictionary = {
@@ -72,17 +103,14 @@ export type Dictionary = {
     ctaSecondary: string;
     proofPoints: string[];
   };
-  frontDesk: {
-    thread: ChatMessage[];
-    contact: string;
-    initials: string;
-    channel: string;
+  frontDesk: ClientChat & {
     badge: string;
     bookedTitle: string;
     bookedDetail: string;
     footnote: string;
   };
   problem: {
+    eyebrow: string;
     title: string;
     body: [string, string];
     punchline: string;
@@ -90,63 +118,71 @@ export type Dictionary = {
       slow: { label: string; value: string; from: string; to: string };
       fast: { label: string; value: string; from: string; to: string };
     };
+    /** The money argument, made where the 9pm → 7am story already lands. */
+    roi: { line: string; sum: string };
   };
   stats: {
-    items: { value: string; label: string }[];
-    pendingChip: string;
-    measuredChip: string;
-    closer: string;
+    eyebrow: string;
+    title: string;
+    lede: string;
+    /**
+     * `plus` renders the raised + that marks a figure as a floor rather than a
+     * measurement — the same job the footnote does, carried typographically.
+     */
+    items: { value: string; plus: boolean; label: string }[];
+    footnote: string;
   };
   lifecycle: {
+    eyebrow: string;
     title: string;
     stages: LifecycleStage[];
     youLabel: string;
     closer: { yours: string; runvo: string };
   };
   roles: {
+    eyebrow: string;
     title: string;
+    lede: string;
     items: Role[];
     badges: { available: string; soon: string };
     integrations: string;
-    assistantHeader: string;
-    /** Owner-facing thread beside the cards. `out` is the owner texting in. */
-    assistantThread: ChatMessage[];
-    /** The end-of-day review run: the assistant asks first, then drafts. */
-    reviews: {
-      header: string;
-      nudgeTitle: string;
-      nudgeBody: string;
-      nudgePrimary: string;
-      nudgeSecondary: string;
-      listTitle: string;
-      listBody: string;
-      clients: ReviewClient[];
-      skipLabel: string;
-      draftCta: string;
-      drafting: string;
-      drafts: ReviewDraft[];
-      /** Shown in place of `{link}`; shortened so it doesn't wrap three lines. */
-      link: string;
-      whatsapp: string;
-      sms: string;
-      done: string;
-    };
+    scenes: Scene[];
+    /** Accessible names for the rail and its arrows. */
+    railLabel: string;
+    prev: string;
+    next: string;
   };
   trust: {
+    eyebrow: string;
     title: string;
     body: string;
-    chips: string[];
-    demoTitle: string;
-    ask: string;
-    reply: string;
-    handoffStrong: string;
-    handoffRest: string;
+    /** Facts about the product, each with a bold lead and the rest of the line. */
+    rules: { lead: string; rest: string }[];
+    /** No asterisk needed — these are properties of the product, not outcomes. */
+    proof: { value: string; label: string }[];
+    demo: {
+      clientHeader: string;
+      ask: string;
+      reply: string;
+      ownerHeader: string;
+      handoffTitle: string;
+      handoffBody: string;
+      muted: string;
+    };
   };
   pricing: {
+    eyebrow: string;
     title: string;
     tiers: { name: string; price: string; note: string; featured: boolean }[];
     perMonth: string;
     closer: string;
+    fine: string;
+  };
+  faq: {
+    eyebrow: string;
+    title: string;
+    lede: string;
+    items: { q: string; a: string }[];
   };
   waitlist: {
     title: string;
@@ -161,6 +197,8 @@ export type Dictionary = {
   };
   footer: {
     legal: string;
+    /** Points at the other locale, written in that locale. */
+    otherLanguage: string;
   };
 };
 

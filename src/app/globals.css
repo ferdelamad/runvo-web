@@ -164,3 +164,35 @@
     transform: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   The outcome rail. Its first card sits on the page grid and the rest run off
+   the right edge of the viewport, so the inset is computed from the section's
+   own width (a container query unit — `100vw` would include the scrollbar).
+--------------------------------------------------------------------------- */
+.rv-rail-scope {
+  container-type: inline-size;
+}
+
+.rv-rail {
+  --rail-inset: max(1.25rem, calc((100cqw - 1180px) / 2 + 1.25rem));
+  padding-inline: var(--rail-inset) 1.25rem;
+  scroll-padding-inline-start: var(--rail-inset);
+}
+
+@media (min-width: 640px) {
+  .rv-rail {
+    --rail-inset: max(2rem, calc((100cqw - 1180px) / 2 + 2rem));
+    padding-inline-end: 2rem;
+  }
+}
+
+/* Native accordions: no marker, and the answer animates open. */
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details[open] > :not(summary) {
+  animation: rv-pop 320ms var(--ease-out-soft) both;
+}
+

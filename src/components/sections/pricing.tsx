@@ -1,6 +1,7 @@
 import { ParallaxBlob } from "@/components/motion/parallax-blob";
 import { Reveal } from "@/components/motion/reveal";
 import { SectionLift } from "@/components/motion/section-lift";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { cn } from "@/lib/cn";
 import type { Dictionary } from "@/lib/dictionary";
 
@@ -18,12 +19,13 @@ export function Pricing({ dict }: { dict: Dictionary }) {
       />
 
       <div className="relative z-1 mx-auto max-w-[1180px]">
-        <Reveal
-          as="h2"
-          className="font-display mt-0 mb-10 max-w-[14em] text-[34px] leading-[1.03] tracking-[-0.02em] sm:text-[44px] lg:text-[60px]"
-        >
-          {pricing.title}
-        </Reveal>
+        <SectionHeading
+          tone="dark"
+          eyebrow={pricing.eyebrow}
+          title={pricing.title}
+          size="lg"
+          className="mb-10 lg:mb-12"
+        />
 
         <div className="mb-8 grid gap-[18px] md:grid-cols-3 lg:mb-[34px]">
           {pricing.tiers.map((tier, index) => (
@@ -31,7 +33,7 @@ export function Pricing({ dict }: { dict: Dictionary }) {
               key={tier.name}
               delay={index * 70}
               className={cn(
-                "rounded-[28px] p-[30px]",
+                "rounded-[28px] p-[30px] transition-transform duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)] hover:-translate-y-1",
                 tier.featured ? "bg-clay-500 text-clay-50" : "bg-ink-800",
               )}
             >
@@ -68,6 +70,9 @@ export function Pricing({ dict }: { dict: Dictionary }) {
           className="text-cream-400 m-0 max-w-[42em] text-[18px] leading-[1.55] text-pretty sm:text-[20px]"
         >
           {pricing.closer}
+        </Reveal>
+        <Reveal as="p" delay={60} className="text-cream-500 mt-4 mb-0 text-[14.5px]">
+          {pricing.fine}
         </Reveal>
       </div>
     </SectionLift>

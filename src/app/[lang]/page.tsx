@@ -2,11 +2,12 @@ import { notFound } from "next/navigation";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { Faq } from "@/components/sections/faq";
 import { Hero } from "@/components/sections/hero";
 import { Lifecycle } from "@/components/sections/lifecycle";
 import { Pricing } from "@/components/sections/pricing";
 import { Problem } from "@/components/sections/problem";
-import { Roles } from "@/components/sections/roles";
+import { Scenes } from "@/components/sections/scenes";
 import { Stats } from "@/components/sections/stats";
 import { Trust } from "@/components/sections/trust";
 import { Waitlist } from "@/components/sections/waitlist";
@@ -37,9 +38,10 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         <Problem dict={dict} />
         <Stats dict={dict} />
         <Lifecycle dict={dict} />
-        <Roles dict={dict} />
+        <Scenes dict={dict} />
         <Trust dict={dict} />
         <Pricing dict={dict} />
+        <Faq dict={dict} />
         <Waitlist dict={dict} />
       </main>
 
@@ -54,32 +56,51 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   );
 }
 
-/** Product/offer markup so search results can show the roles and their prices. */
+/**
+ * Product/offer markup so search results can show the roles and their prices,
+ * plus the FAQ so the answers can surface as rich results.
+ */
 function structuredData(dict: Dictionary) {
+  const url = `${site.url}/${dict.locale}`;
+
   return {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: site.name,
-    url: `${site.url}/${dict.locale}`,
-    applicationCategory: "BusinessApplication",
-    description: dict.meta.description,
-    // The product is bilingual whichever page you landed on; this page is one.
-    inLanguage: dict.locale,
-    availableLanguage: [...locales],
-    publisher: {
-      "@type": "Organization",
-      name: site.name,
-      url: site.url,
-      email: site.email,
-      areaServed: "US-CA",
-    },
-    featureList: dict.roles.items.map((role) => `${role.name}: ${role.body}`),
-    offers: dict.pricing.tiers.map((tier) => ({
-      "@type": "Offer",
-      name: tier.name,
-      price: tier.price.replace(/[^\d.]/g, ""),
-      priceCurrency: "USD",
-      description: tier.note,
-    })),
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        name: site.name,
+        url,
+        applicationCategory: "BusinessApplication",
+        description: dict.meta.description,
+        // The product is bilingual whichever page you landed on; this page is one.
+        inLanguage: dict.locale,
+        availableLanguage: [...locales],
+        publisher: {
+          "@type": "Organization",
+          name: site.name,
+          url: site.url,
+          email: site.email,
+          areaServed: "US-CA",
+        },
+        featureList: dict.roles.items.map((role) => `${role.name}: ${role.body}`),
+        offers: dict.pricing.tiers.map((tier) => ({
+          "@type": "Offer",
+          name: tier.name,
+          price: tier.price.replace(/[^\d.]/g, ""),
+          priceCurrency: "USD",
+          description: tier.note,
+        })),
+      },
+      {
+        "@type": "FAQPage",
+        url: `${url}#faq`,
+        inLanguage: dict.locale,
+        mainEntity: dict.faq.items.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: { "@type": "Answer", text: item.a },
+        })),
+      },
+    ],
   };
 }

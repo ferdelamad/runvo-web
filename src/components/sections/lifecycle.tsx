@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { Reveal } from "@/components/motion/reveal";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { useInView } from "@/hooks/use-in-view";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/lib/cn";
@@ -126,12 +127,11 @@ export function Lifecycle({ dict }: { dict: Dictionary }) {
 
   return (
     <section id="how" className="mx-auto max-w-[1180px] px-5 py-20 sm:px-8 lg:pt-24 lg:pb-[104px]">
-      <Reveal
-        as="h2"
-        className="font-display mt-0 mb-10 text-[34px] leading-[1.05] tracking-[-0.02em] sm:text-[44px] lg:mb-[46px] lg:text-[56px]"
-      >
-        {lifecycle.title}
-      </Reveal>
+      <SectionHeading
+        eyebrow={lifecycle.eyebrow}
+        title={lifecycle.title}
+        className="mb-10 lg:mb-[46px]"
+      />
 
       <ol
         ref={listRef}

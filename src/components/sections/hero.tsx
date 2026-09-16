@@ -1,12 +1,13 @@
 import { ParallaxBlob } from "@/components/motion/parallax-blob";
 import { Reveal } from "@/components/motion/reveal";
+import { WordReveal } from "@/components/motion/word-reveal";
 import { ButtonLink } from "@/components/ui/button";
 import { DotList } from "@/components/ui/dot-list";
 import type { Dictionary } from "@/lib/dictionary";
-import { FrontDeskDemo } from "./front-desk-demo";
+import { ClientChatDemo } from "./client-chat-demo";
 
 export function Hero({ dict }: { dict: Dictionary }) {
-  const { hero } = dict;
+  const { hero, frontDesk } = dict;
 
   return (
     <section
@@ -15,18 +16,18 @@ export function Hero({ dict }: { dict: Dictionary }) {
     >
       <div>
         <Reveal className="bg-cream-300 border-cream-400 text-ink-700 mb-6 inline-flex items-center gap-[9px] rounded-full border py-[7px] pr-4 pl-2.5 text-sm font-semibold">
-          <span aria-hidden className="bg-sage-400 block h-2 w-2 rounded-full" />
+          <span aria-hidden className="relative flex h-2 w-2">
+            <span className="bg-sage-400 rv-animated absolute inline-flex h-full w-full animate-ping rounded-full opacity-60" />
+            <span className="bg-sage-400 relative inline-flex h-2 w-2 rounded-full" />
+          </span>
           {hero.badge}
         </Reveal>
 
-        <Reveal
+        <WordReveal
           as="h1"
-          delay={60}
+          text={hero.titleLines}
           className="font-display mt-0 mb-6 text-[42px] leading-[0.98] tracking-[-0.025em] text-balance sm:text-[58px] lg:text-[78px]"
-        >
-          {hero.titleLines[0]} <br className="hidden sm:inline" />
-          {hero.titleLines[1]}
-        </Reveal>
+        />
 
         <Reveal
           as="p"
@@ -46,23 +47,22 @@ export function Hero({ dict }: { dict: Dictionary }) {
         </Reveal>
 
         <Reveal delay={240}>
-          <DotList
-            items={hero.proofPoints}
-            className="text-ink-700 text-[15px] font-medium"
-          />
+          <DotList items={hero.proofPoints} className="text-ink-700 text-[15px] font-medium" />
         </Reveal>
       </div>
 
       <Reveal delay={140} className="relative">
-        <ParallaxBlob
-          speed={-0.1}
-          className="bg-sage-100 -top-12 -right-[70px] z-0 h-80 w-80"
-        />
+        <ParallaxBlob speed={-0.1} className="bg-sage-100 -top-12 -right-[70px] z-0 h-80 w-80" />
         <ParallaxBlob
           speed={0.14}
           className="bg-clay-100 bottom-5 -left-[46px] z-0 h-[150px] w-[150px]"
         />
-        <FrontDeskDemo dict={dict} />
+        <ClientChatDemo
+          chat={frontDesk}
+          badge={frontDesk.badge}
+          outro={{ title: frontDesk.bookedTitle, detail: frontDesk.bookedDetail }}
+          footnote={frontDesk.footnote}
+        />
       </Reveal>
     </section>
   );

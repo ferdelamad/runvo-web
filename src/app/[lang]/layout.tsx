@@ -84,11 +84,14 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
     <html lang={lang} className={`${figtree.variable} ${caprasimo.variable} antialiased`}>
       <head>
         {/*
-          Scroll reveals hide their content until an IntersectionObserver fires.
-          Without JS nothing would ever fire, so opt straight into the end state.
+          Scroll reveals, chat playback and Motion elements all hide their
+          content until JavaScript reveals it. Without JS nothing would ever
+          fire, so opt straight into every end state: `.rv-reveal`/`.rv-lift`
+          are the section reveals, `.rv-js` a demo element waiting on
+          playback, `.rv-motion` anything Motion has left dim.
         */}
         <noscript>
-          <style>{`.rv-reveal,.rv-lift{opacity:1!important;transform:none!important}`}</style>
+          <style>{`.rv-reveal,.rv-lift,.rv-js,.rv-motion{opacity:1!important;transform:none!important}.rv-js[hidden]{display:flex!important}`}</style>
         </noscript>
       </head>
       <body>{children}</body>
